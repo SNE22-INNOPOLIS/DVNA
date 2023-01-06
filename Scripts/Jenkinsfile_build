@@ -1,0 +1,104 @@
+pipeline {
+  agent any
+
+  stages {
+
+    stage('Send Start Alert') {
+      steps {
+        script {
+          // Get the user who launched the job
+          //wrap([$class: 'BuildUser']) {
+          //  def user = env.BUILD_USER
+          //}
+          // Send start notification
+          telegramSend(
+            token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
+            chatId: '-688306623',
+            message: "The job RP1 Build and Test has started and is currently running."
+          )
+        }
+      }
+    }
+
+    // Building and Testing the application.
+    stage('Install') {
+      steps {
+        sh 'sudo apt-get update'
+        sh 'yes | sudo apt install docker.io curl && sudo snap install docker'
+        echo 'necessary updates and installation completed>>>'
+      }
+    }
+
+    stage('Build') {
+      steps {
+        sh 'docker rm -f sne22-webapp'
+        echo 'redundant container check passed!'
+        sh 'docker build -t my-webapp .'
+        echo 'build completed>>>'
+      }
+    }
+    
+    // Testing the container run-time
+    stage('Test') {
+      steps {
+        sh 'docker run -d --name sne22-webapp -p 9000:9000 my-webapp'
+        echo 'container test deployment was successfull>>>'
+      }
+    }
+    
+    // Security scan using Snyk
+    stage('Security Scan') {
+      steps {
+        snykSecurity additionalArguments: '--docker my-webapp',failOnError: false, failOnIssues: false, snykInstallation: 'Snyk', snykTokenId: 'Snyk-Jenkins', targetFile: 'Dockerfile'
+      }
+    }  
+    
+    // Pushing application and it's artifacts to container repository
+    stage('Push') {
+      steps {
+        echo 'now pushing working image to dockerhub...'
+        sh 'docker login -u rp1sne22 -p dckr_pat_gi6co2PnC5xTtoElVINANoHAAt4 docker.io'
+        sh 'docker tag my-webapp rp1sne22/my-webapp:latest'
+        sh 'docker push rp1sne22/my-webapp:latest'
+        echo 'container image push was successfull>>>'
+      }
+    }
+    
+    // Deleting the container from the jenkins agent node
+    stage('Cleanup') {
+      steps {
+        echo 'initializing test server cleanup...'
+        sh 'docker rm -f $(docker ps -a -q)'
+        echo 'removed container runtime'
+        sh 'docker image prune'
+        echo 'removed docker image'
+      }
+    }
+  }
+
+  // Sending Notification upon job completion
+  post {
+        success {
+            script {
+                // Send success notification
+                telegramSend(
+                    token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
+                    chatId: '-688306623',
+                    message: "The job RP1 Build and Test has completed successfully."
+                )
+            }
+        }
+        failure {
+            script {
+                // Get the cause of the failure
+                def failureCause = currentBuild.getResult().toString()
+                // Send failure notification
+                telegramSend(
+                    token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
+                    chatId: '-688306623',
+                    message: "The job RP1 Build and Test has failed due to ${failureCause}."
+                )
+            }
+        }
+    }
+}
