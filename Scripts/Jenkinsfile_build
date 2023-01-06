@@ -32,8 +32,8 @@ pipeline {
       steps {
 
         sh'''
-        docker rm -f dvna-app
-        docker rmi dvna-sne22-rp1
+        docker rm -f dvna-app | true
+        docker rmi dvna-sne22-rp1 | true
         '''
 
         echo 'purged previous build instances!!!'
@@ -84,7 +84,7 @@ pipeline {
         echo 'initializing test server cleanup...'
         sh 'docker rm -f $(docker ps -a -q)'
         echo 'removed container runtime'
-        sh 'docker image prune'
+        sh 'docker image prune -y'
         echo 'removed docker image'
       } 
     } */
