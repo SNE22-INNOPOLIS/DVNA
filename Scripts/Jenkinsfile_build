@@ -18,8 +18,11 @@ pipeline {
     // Building and Testing the application.
     stage('Install') {
       steps {
-        sh 'sudo apt-get update'
-        sh 'docker info'
+        sh '''
+        sudo apt-get update
+        sudo apt install npm
+        sudo docker info
+        '''
         echo 'necessary updates and installation check completed>>>'
       }
     }
