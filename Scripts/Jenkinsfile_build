@@ -20,6 +20,7 @@ pipeline {
       steps {
         sh '''
         sudo apt-get update
+        sudo apt purge npm
         sudo apt install npm
         sudo docker info
         '''
@@ -29,18 +30,27 @@ pipeline {
 
     stage('Build') {
       steps {
+
+        sh'''
+        docker rm -f dvna-app
+        docker rmi dvna-sne22-rp1
+        '''
+
+        echo 'purged previous build instances!!!'
+        echo 'now building container image>>>'
+
         sh '''
-          npm install
-          '''
-        echo 'dependencies are now installed!'
-        echo 'build completed>>>'
+        docker build -t dvna-sne22-rp1 -f Dockerfile-dev .
+        '''
+
+        echo 'container image successfully built!'
       }
     }
     
     // Testing the container run-time
     stage('Test') {
       steps {
-        sh 'npm start'
+        sh 'docker-compose -f docker-compose.yml '
         echo 'application started'
       }
     }
