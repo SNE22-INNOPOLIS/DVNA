@@ -5,9 +5,6 @@ services:
   app:
     container_name: dvna-app
     image: dvna-sne22-rp1
-    #build:
-      #context: ./
-      #dockerfile: Dockerfile-dev
     ports:
       - 9090:9090
     volumes:
