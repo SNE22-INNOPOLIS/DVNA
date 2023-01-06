@@ -79,14 +79,14 @@ pipeline {
     }
     
     // Deleting the container from the jenkins agent node
-    stage('Cleanup') {
+/*    stage('Cleanup') {
       steps {
         echo 'initializing test server cleanup...'
         sh 'docker rm -f $(docker ps -a -q)'
         echo 'removed container runtime'
         sh 'docker image prune'
         echo 'removed docker image'
-      }
+      } */
     }
   }
 
