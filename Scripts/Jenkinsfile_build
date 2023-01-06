@@ -93,31 +93,5 @@ pipeline {
     }
   
 */
-
-  // Sending Notification upon job completion
-    post {
-        success {
-            script {
-                // Send success notification
-                telegramSend(
-                    token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
-                    chatId: '-688306623',
-                    message: "The job RP1 Build and Test has completed successfully."
-                )
-            }
-        }
-        failure {
-            script {
-                // Get the cause of the failure
-                def failureCause = currentBuild.getResult().toString()
-                // Send failure notification
-                telegramSend(
-                    token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
-                    chatId: '-688306623',
-                    message: "The job RP1 Build and Test has failed due to ${failureCause}."
-                )
-            }
-        }
-    }
   }
 }
