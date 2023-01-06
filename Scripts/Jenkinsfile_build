@@ -47,11 +47,9 @@ pipeline {
     stage('Build') {
       steps {
         sh '''
-            docker rm -f sne22-webapp
-            mvn clean package
+          npm install
           '''
-        echo 'redundant container check passed!'
-        sh 'docker build -t my-webapp .'
+        echo 'dependencies are now installed!'
         echo 'build completed>>>'
       }
     }
@@ -59,8 +57,8 @@ pipeline {
     // Testing the container run-time
     stage('Test') {
       steps {
-        sh 'docker run -d --name sne22-webapp -p 9000:9000 my-webapp'
-        echo 'container test deployment was successfull>>>'
+        sh 'npm start'
+        echo 'application started'
       }
     }
     
@@ -71,6 +69,7 @@ pipeline {
       }
     }  
     
+    /*
     // Pushing application and it's artifacts to container repository
     stage('Push') {
       steps {
@@ -93,6 +92,7 @@ pipeline {
       }
     }
   }
+*/
 
   // Sending Notification upon job completion
   post {
