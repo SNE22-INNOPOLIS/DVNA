@@ -58,18 +58,22 @@ pipeline {
     // Security scan using Snyk
     stage('Security Scan') {
       steps {
-        snykSecurity additionalArguments: '--docker dvna-sne22-rp1',failOnError: false, failOnIssues: false, snykInstallation: 'Snyk', snykTokenId: 'Snyk-Jenkins', targetFile: 'Dockerfile'
+        snykSecurity additionalArguments: '--docker dvna-sne22-rp1',failOnError: true, failOnIssues: true, snykSecurity severity: 'critical' snykInstallation: 'Snyk', snykTokenId: 'Snyk-Jenkins', targetFile: 'Dockerfile'
       }
     }  
     
-    /*
+    
     // Pushing application and it's artifacts to container repository
     stage('Push') {
       steps {
         echo 'now pushing working image to dockerhub...'
-        sh 'docker login -u rp1sne22 -p dckr_pat_gi6co2PnC5xTtoElVINANoHAAt4 docker.io'
-        sh 'docker tag my-webapp rp1sne22/my-webapp:latest'
-        sh 'docker push rp1sne22/my-webapp:latest'
+        
+        sh '''
+        docker login -u rp1sne22 -p dckr_pat_gi6co2PnC5xTtoElVINANoHAAt4 docker.io
+        docker tag dvna-app rp1sne22/dvna-app:1.0
+        docker push rp1sne22/dvna-app:1.0
+        '''
+        
         echo 'container image push was successfull>>>'
       }
     }
@@ -84,7 +88,5 @@ pipeline {
         echo 'removed docker image'
       }
     }
-  
-*/
   }
 }
