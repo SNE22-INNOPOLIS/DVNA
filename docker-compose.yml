@@ -12,11 +12,11 @@ services:
     depends_on:
       - mysql-db
     env_file:
-      - vars.env
+      - ./vars.env
   mysql-db:
     container_name: dvna-mysql-db
     image: mysql:5.7
     expose:
       - "3306"
     env_file:
-      - vars.env
+      - ./vars.env
