@@ -29,9 +29,26 @@ pipeline {
       }
     }
 
+    stage('Check Git Secrets') {
+      steps {
+        sh 'rm trufflehog || true'
+        sh 'docker pull trufflesecurity/trufflehog'
+        sh 'docker run -t trufflesecurity/trufflehog --json https://github.com/SNE22-INNOPOLIS/DVNA.git > trufflehog'
+      }
+    }
+
+    stage('Dependency Check') {
+      steps {
+        dependencyCheck additionalArguments: '--project RP1 Build and Test Job', odcInstallation: 'Dependency Check'
+      }
+    }
+
     stage('Build') {
       steps {
-        sh 'docker rm -f sne22-webapp'
+        sh '''
+            docker rm -f sne22-webapp
+            mvn clean package
+          '''
         echo 'redundant container check passed!'
         sh 'docker build -t my-webapp .'
         echo 'build completed>>>'
