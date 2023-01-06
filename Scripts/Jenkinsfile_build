@@ -91,11 +91,11 @@ pipeline {
         echo 'removed docker image'
       }
     }
-  }
+  
 */
 
   // Sending Notification upon job completion
-  post {
+    post {
         success {
             script {
                 // Send success notification
@@ -119,4 +119,5 @@ pipeline {
             }
         }
     }
+  }
 }
