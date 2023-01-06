@@ -86,8 +86,8 @@ pipeline {
         echo 'removed container runtime'
         sh 'docker image prune'
         echo 'removed docker image'
-      } */
-    }
+      } 
+    } */
   }
 
   // Sending Notification upon job completion
