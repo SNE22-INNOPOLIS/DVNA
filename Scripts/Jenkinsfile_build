@@ -28,6 +28,12 @@ pipeline {
       }
     }
 
+      stage('Dependency Check') {
+      steps {
+        dependencyCheck additionalArguments: '--project RP1 Build and Test Job', odcInstallation: 'Dependency Check'
+      }
+    }
+
     stage('Build') {
       steps {
 
@@ -70,8 +76,8 @@ pipeline {
         
         sh '''
         docker login -u rp1sne22 -p dckr_pat_gi6co2PnC5xTtoElVINANoHAAt4 docker.io
-        docker tag dvna-sne22-rp1 rp1sne22/dvna-sne22-rp1:1.0
-        docker push rp1sne22/dvna-sne22-rp1:1.0
+        docker tag dvna-sne22-rp1 rp1sne22/dvna-sne22-rp1:1.1
+        docker push rp1sne22/dvna-sne22-rp1:1.1
         '''
         
         echo 'container image push was successfull>>>'
@@ -86,6 +92,33 @@ pipeline {
         echo 'removed container runtime'
         sh 'docker image prune'
         echo 'removed docker image'
+      }
+    }
+  }
+
+  // Sending Notification upon job completion
+  post {
+    success {
+      script {
+        // Send success notification
+        telegramSend(
+          token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
+          chatId: '-688306623',
+          message: "The job RP1 Build and Test has completed successfully."
+        )
+      }
+    }
+    
+    failure {
+      script {
+        // Get the cause of the failure
+        def failureCause = currentBuild.getResult().toString()
+        // Send failure notification
+        telegramSend(
+          token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
+          chatId: '-688306623',
+          message: "The job RP1 Build and Test has failed due to ${failureCause}."
+        )
       }
     }
   }
