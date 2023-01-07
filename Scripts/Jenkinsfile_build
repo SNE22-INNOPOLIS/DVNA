@@ -50,7 +50,7 @@ pipeline {
     // Testing the container run-time
     stage('Test') {
       steps {
-        sh 'sudo docker-compose -f docker-compose.yml up'
+        sh 'sudo docker-compose -f docker-compose.yml up -d'
         echo 'application started'
       }
     }
@@ -79,15 +79,16 @@ pipeline {
     }
     
     // Deleting the container from the jenkins agent node
-/*    stage('Cleanup') {
+    stage('Cleanup') {
       steps {
         echo 'initializing test server cleanup...'
+        sh 'sudo docker-compose down'
         sh 'docker rm -f $(docker ps -a -q)'
         echo 'removed container runtime'
         sh 'docker image prune -y'
         echo 'removed docker image'
       } 
-    } */
+    } 
   }
 
   // Sending Notification upon job completion
