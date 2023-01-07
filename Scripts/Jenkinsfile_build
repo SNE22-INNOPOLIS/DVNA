@@ -83,7 +83,6 @@ pipeline {
       steps {
         echo 'initializing test server cleanup...'
         sh 'sudo docker-compose down'
-        sh 'docker rm -f $(docker ps -a -q)'
         echo 'removed container runtime'
         sh 'docker image prune -y'
         echo 'removed docker image'
