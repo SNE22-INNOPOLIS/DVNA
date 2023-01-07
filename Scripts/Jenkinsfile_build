@@ -50,7 +50,7 @@ pipeline {
     // Testing the container run-time
     stage('Test') {
       steps {
-        sh 'docker-compose up'
+        sh 'sudo docker-compose -f docker-compose.yml up'
         echo 'application started'
       }
     }
