@@ -14,7 +14,7 @@ pipeline {
         }
       }
     }
-     stages {
+    
     stage('Software Composition Analysis Test') {
       steps {
         // Install Python 
