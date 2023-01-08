@@ -25,7 +25,7 @@ pipeline {
       steps {
         echo 'removing previous container version>>>'
         sh 'sudo docker-compose down | true'
-        sh 'sudo docker rmi rp1sne22/dvna-sne22-rp1:1.2 | true'
+        sh 'sudo docker images prune -a'
         echo 'old and running version of container was successfully removed!'
       }
     }
