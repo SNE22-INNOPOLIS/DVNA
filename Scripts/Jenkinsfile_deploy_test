@@ -14,7 +14,7 @@ pipeline {
           telegramSend(
             token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
             chatId: '-688306623',
-            message: "The job Deploy to Test Environment has started and is currently running."
+            message: "The job Deploy to Production has started and is currently running."
           )
         }
       }
@@ -27,9 +27,8 @@ pipeline {
         //sh 'sudo apt install docker.io -y && sudo snap install docker'
         //echo 'docker installation and update check passed!'
         echo 'removing previous container version>>>'
-        sh 'docker stop dvna-app || true'
-        sh 'docker rm -f dvna-app'
-        sh 'docker rmi rp1sne22/dvna-sne22-rp1:1.1t'
+        sh 'sudo docker-compose down'
+        sh 'sudo docker rmi rp1sne22/dvna-sne22-rp1:1.2'
         echo 'old and running version of container was successfully removed!'
       }
     }
@@ -38,7 +37,7 @@ pipeline {
     stage('Pull') {
       steps {
         echo 'pulling container image from repository>>>'
-        sh 'docker pull rp1sne22/dvna-sne22-rp1:1.1'
+        sh 'docker pull rp1sne22/dvna-sne22-rp1:1.2'
         echo 'pulling successfull!'
       }
     }
@@ -46,12 +45,11 @@ pipeline {
     // Deploying the container to production environment (webserver machine)
     stage('Deploy') {
       steps {
-        echo 'attempting container run on port 80>>>'
-        sh 'docker run -d --name dvna-app -p 80:9000 rp1sne22/dvna-sne22-rp1:1.1'
-        echo 'container now running!'
-
-        echo 'container was successfully deployed to production!!!'
-        echo 'you can now access the application on http://10.1.1.40 >>>'
+        echo 'attempting container run on port 9090>>>'
+        sh 'docker-compose -f docker-compose.yml up -d'
+        echo 'containers now running!'
+        echo 'container was successfully deployed to test server!!!'
+        echo 'you can now test the application on http://10.1.1.40:9090 >>>'
       }
     }
   }
@@ -64,7 +62,7 @@ pipeline {
                 telegramSend(
                     token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
                     chatId: '-688306623',
-                    message: "The job Deploy to Test Environment has completed successfully."
+                    message: "The job Deploy to Production has completed successfully."
                 )
             }
         }
@@ -76,7 +74,7 @@ pipeline {
                 telegramSend(
                     token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
                     chatId: '-688306623',
-                    message: "The job Deploy to Test Environment has failed due to ${failureCause}."
+                    message: "The job Deploy to Production has failed due to ${failureCause}."
                 )
             }
         }
