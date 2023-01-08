@@ -56,7 +56,7 @@ pipeline {
     stage('Clean') {
       steps {
         echo 'removing previous container version>>>'
-        sh 'ocker-compose -f docker-compose-deploy.yml down | true'
+        sh 'docker-compose -f docker-compose-deploy.yml down | true'
         sh 'sudo docker rmi rp1sne22/dvna-sne22-rp1:1.2 | true'
         echo 'old and running version of container was successfully removed!'
       }
