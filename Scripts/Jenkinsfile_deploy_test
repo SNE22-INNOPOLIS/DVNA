@@ -44,7 +44,7 @@ pipeline {
     stage('Deploy') {
       steps {
         echo 'attempting container run on port 9090>>>'
-        sh 'yes | docker-compose -f docker-compose.yml up -d'
+        sh 'yes | docker-compose -f docker-compose.yaml up -d'
         echo 'containers now running!'
         echo 'container was successfully deployed to test server!!!'
         echo 'you can now test the application on http://10.1.1.40:9090 >>>'
