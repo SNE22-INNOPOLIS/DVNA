@@ -17,10 +17,10 @@ pipeline {
 
     stage('Dependency check') {
       steps {
-        dependencyCheck additionalArguments: '', odcInstallation: 'Dependency Check'
+        dependencyCheck additionalArguments: '--disableYarnAudit', odcInstallation: 'Dependency Check'
       }
     }
-    
+
     // Building and Testing the application.
     stage('Install') {
       steps {
