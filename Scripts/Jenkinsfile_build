@@ -26,12 +26,11 @@ pipeline {
         // Run Syft scan on codebase
         sh 'syft scan -o syft-report.json'        
       }
+    }
 
     // Building and Testing the application.
     stage('Install') {
       steps {
-      
-      
       // Check Syft report for any vulnerabilities or license issues
         def report = readJSON file: 'syft-report.json'
         def message
@@ -43,9 +42,6 @@ pipeline {
         }
         // Send message to Telegram bot
         sh "curl -X POST -H 'Content-Type: application/json' -d '{\"chat_id\": \"-688306623\", \"text\": \"${message}\"}' https://api.telegram.org/bot5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI/sendMessage"
-      
-      
-      
         sh '''
         sudo apt-get update
         sudo apt purge npm -y
