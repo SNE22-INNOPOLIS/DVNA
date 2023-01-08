@@ -14,7 +14,7 @@ pipeline {
           telegramSend(
             token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
             chatId: '-688306623',
-            message: "The job Deploy to Production has started and is currently running."
+            message: "The job Deploy to test environment has started and is currently running."
           )
         }
       }
@@ -59,7 +59,7 @@ pipeline {
                 telegramSend(
                     token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
                     chatId: '-688306623',
-                    message: "The job Deploy to Production has completed successfully."
+                    message: "The job Deploy to test environment has completed successfully."
                 )
             }
         }
@@ -71,7 +71,7 @@ pipeline {
                 telegramSend(
                     token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
                     chatId: '-688306623',
-                    message: "The job Deploy to Production has failed due to ${failureCause}."
+                    message: "The job Deploy to test environment has failed due to ${failureCause}."
                 )
             }
         }
