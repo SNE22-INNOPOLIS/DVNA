@@ -82,7 +82,7 @@ pipeline {
     stage('Cleanup') {
       steps {
         echo 'initializing test server cleanup...'
-        sh 'sudo docker-compose down'
+        sh 'sudo docker-compose -f docker-compose-build.yml down'
         echo 'removed container runtime'
         sh 'docker image prune -a'
         echo 'removed docker image'
