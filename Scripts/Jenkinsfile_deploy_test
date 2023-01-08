@@ -12,7 +12,7 @@ pipeline {
           //}
           // Send start notification
           telegramSend(
-            token: '5451305173:AAGSmRL_518hBsPx3N_Zih_cy0oeMbZhpyI',
+            token: Telegram_Token,
             chatId: '-688306623',
             message: "The job Deploy to test environment has started and is currently running."
           )
@@ -53,6 +53,9 @@ pipeline {
 
     stage('ZAP Scan') {
       steps {
+
+
+
         zapScan target: 'http://10.1.1.40:9090',
                 excludedUrls: '',
                 reportBuildPolicy: 'FAIL',
