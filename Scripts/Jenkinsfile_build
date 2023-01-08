@@ -17,7 +17,7 @@ pipeline {
 
     stage('Dependency check') {
       steps {
-        dependencyCheck additionalArguments: '--disableYarnAudit', odcInstallation: 'Dependency Check'
+        dependencyCheck additionalArguments: '--disableYarnAudit --format HTML', odcInstallation: 'Dependency Check'
       }
     }
 
