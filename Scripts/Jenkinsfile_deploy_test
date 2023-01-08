@@ -12,7 +12,7 @@ pipeline {
           //}
           // Send start notification
           telegramSend(
-            token: Telegram_Token,
+            token: $(Telegram_Token),
             chatId: '-688306623',
             message: "The job Deploy to test environment has started and is currently running."
           )
