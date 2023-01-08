@@ -23,9 +23,6 @@ pipeline {
     // Removing previous and running versions of the container image
     stage('Clean') {
       steps {
-        //sh 'sudo apt-get update -y'
-        //sh 'sudo apt install docker.io -y && sudo snap install docker'
-        //echo 'docker installation and update check passed!'
         echo 'removing previous container version>>>'
         sh 'sudo docker-compose down'
         sh 'sudo docker rmi rp1sne22/dvna-sne22-rp1:1.2'
@@ -47,10 +44,9 @@ pipeline {
       steps {
         echo 'attempting container run on port 9090>>>'
         sh 'docker-compose -f docker-compose.yml up -d'
-        echo 'container now running!'
-
-        echo 'container was successfully deployed to production!!!'
-        echo 'you can now access the application on http://10.1.1.40 >>>'
+        echo 'containers now running!'
+        echo 'container was successfully deployed to test server!!!'
+        echo 'you can now test the application on http://10.1.1.40:9090 >>>'
       }
     }
   }
