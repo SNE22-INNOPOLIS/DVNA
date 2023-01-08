@@ -23,9 +23,6 @@ pipeline {
     // Removing previous and running versions of the container image
     stage('Clean') {
       steps {
-        //sh 'sudo apt-get update -y'
-        //sh 'sudo apt install docker.io -y && sudo snap install docker'
-        //echo 'docker installation and update check passed!'
         echo 'removing previous container version>>>'
         sh 'sudo docker-compose down'
         sh 'sudo docker rmi rp1sne22/dvna-sne22-rp1:1.2'
