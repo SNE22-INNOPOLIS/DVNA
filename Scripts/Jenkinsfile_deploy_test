@@ -50,6 +50,16 @@ pipeline {
         echo 'you can now test the application on http://10.1.1.40:9090 >>>'
       }
     }
+
+    stage('ZAP Scan') {
+      steps {
+        zapScan target: 'http://10.1.1.40:9090',
+                excludedUrls: '',
+                reportBuildPolicy: 'FAIL',
+                apiKey: '',
+                zapOptions: '-config api.disablekey=true'
+      }
+    }
   }
 
   // Sending Notification upon job completion
