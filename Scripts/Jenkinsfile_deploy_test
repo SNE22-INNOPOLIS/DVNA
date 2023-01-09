@@ -57,7 +57,7 @@ pipeline {
       }
       steps {
         sh '''
-          docker run -v ${WORKSPACE}:/hawk:rw -t \
+          docker run -v /var/lib/jenkins/workspace/'RP1 Deploy To Test Environment Job':/hawk:rw -t \
             -e API_KEY=${HAWK_API_KEY} \
             -e NO_COLOR=true \
             stackhawk/hawkscan
