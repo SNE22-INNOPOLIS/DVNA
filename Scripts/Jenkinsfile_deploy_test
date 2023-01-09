@@ -40,7 +40,7 @@ pipeline {
       }
     }
 
-    // Deploying the container to production environment (webserver machine)
+    // Deploying the container to test environment (webserver machine)
     stage('Deploy') {
       steps {
         echo 'attempting container run on port 9090>>>'
@@ -51,16 +51,17 @@ pipeline {
       }
     }
 
-    stage('ZAP Scan') {
+    stage ("Run DAST Test") {
+      environment {
+        HAWK_API_KEY = credentials('HAWK_API_KEY')
+      }
       steps {
-
-
-
-        zapScan target: 'http://10.1.1.40:9090',
-                excludedUrls: '',
-                reportBuildPolicy: 'FAIL',
-                apiKey: '',
-                zapOptions: '-config api.disablekey=true'
+        sh '''
+          docker run -v ${WORKSPACE}:/hawk:rw -t \
+            -e API_KEY=${HAWK_API_KEY} \
+            -e NO_COLOR=true \
+            stackhawk/hawkscan
+        '''
       }
     }
   }
