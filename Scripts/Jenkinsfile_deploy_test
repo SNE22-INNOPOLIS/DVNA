@@ -53,7 +53,7 @@ pipeline {
 
     stage ("Run DAST Test") {
       environment {
-        HAWK_API_KEY = credentials('HAWK_API_KEY')
+        HAWK_API_KEY = credentials('Hawk_API_KEY')
       }
       steps {
         sh '''
